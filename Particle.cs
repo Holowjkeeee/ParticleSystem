@@ -37,7 +37,7 @@ internal class Particle
         this.Y = Y;
     }
 
-    public void Draw(Graphics g)
+    public virtual void Draw(Graphics g)
     {
         // рассчитываем коэффициент прозрачности по шкале от 0 до 1.0
         float k = Math.Min(1f, Life / 100);

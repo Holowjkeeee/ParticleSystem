@@ -55,13 +55,13 @@ public partial class Form1 : Form
         for (var i = 0; i < 10; ++i)
         {
             if (particles.Count > 500) return; // пока частиц меньше 500 генерируем новые
-
-            particles.Add(
-                new()
-                {
-                    X = MousePositionX,
-                    Y = MousePositionY
-                });
+            var particle = new ParticleColorful();
+            // ну и цвета меняем
+            particle.FromColor = Color.Yellow;
+            particle.ToColor = Color.FromArgb(0, Color.Magenta);
+            particle.X = MousePositionX;
+            particle.Y = MousePositionY;
+            particles.Add(particle);
             
         }
     }
@@ -82,7 +82,7 @@ public partial class Form1 : Form
 
         using var g = Graphics.FromImage(picDisplay.Image);
         // рисую на изображении сколько насчитал
-        g.Clear(Color.White); // добавил очистку
+        g.Clear(Color.Black); // добавил очистку
         Render(g);
 
         // обновить picDisplay
