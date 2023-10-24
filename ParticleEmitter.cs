@@ -11,6 +11,8 @@ class ParticleEmitter
     List<Particle> particles = new();
     public int MousePositionX;
     public int MousePositionY;
+    public float GravitationX = 0;
+    public float GravitationY = 1; // пусть гравитация будет силой один пиксель за такт, нам хватит
 
     public void UpdateState()
     {
@@ -40,6 +42,10 @@ class ParticleEmitter
             }
             else
             {
+
+                // гравитация воздействует на вектор скорости, поэтому пересчитываем его
+                particle.SpeedX += GravitationX;
+                particle.SpeedY += GravitationY;
                 // и добавляем новый, собственно он даже проще становится, 
                 // так как теперь мы храним вектор скорости в явном виде и его не надо пересчитывать
                 particle.X += particle.SpeedX;
