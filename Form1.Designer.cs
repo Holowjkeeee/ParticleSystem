@@ -49,6 +49,7 @@
             picDisplay.Size = new Size(800, 450);
             picDisplay.TabIndex = 0;
             picDisplay.TabStop = false;
+            picDisplay.MouseMove += picDisplay_MouseMove;
             // 
             // Form1
             // 
