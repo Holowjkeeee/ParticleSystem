@@ -12,7 +12,8 @@ class ParticleEmitter
     public int MousePositionX;
     public int MousePositionY;
     public float GravitationX = 0;
-    public float GravitationY = 1; // пусть гравитация будет силой один пиксель за такт, нам хватит
+    public float GravitationY = 0; // пусть гравитация будет силой один пиксель за такт, нам хватит
+    public List<Point> gravityPoints = new(); // тут буду хранится точки притяжения
 
     public void UpdateState()
     {
@@ -42,6 +43,17 @@ class ParticleEmitter
             }
             else
             {
+                // каждая точка по-своему воздействует на вектор скорости
+                foreach (var point in gravityPoints)
+                {
+                    float gX = point.X - particle.X;
+                    float gY = point.Y - particle.Y;
+                    float r2 = (float)Math.Max(100, gX * gX + gY * gY); // ограничил
+                    float M = 100;
+
+                    particle.SpeedX += (gX) * M / r2;
+                    particle.SpeedY += (gY) * M / r2;
+                }
 
                 // гравитация воздействует на вектор скорости, поэтому пересчитываем его
                 particle.SpeedX += GravitationX;
@@ -76,6 +88,17 @@ class ParticleEmitter
         foreach (var particle in particles)
         {
             particle.Draw(g);
+        }
+        // рисую точки притяжения красными кружочками
+        foreach (var point in gravityPoints)
+        {
+            g.FillEllipse(
+                new SolidBrush(Color.Red),
+                point.X - 5,
+                point.Y - 5,
+                10,
+                10
+            );
         }
     }
 }
