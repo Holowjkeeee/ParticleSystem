@@ -28,12 +28,44 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            timer1 = new System.Windows.Forms.Timer(components);
+            picDisplay = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)picDisplay).BeginInit();
+            SuspendLayout();
+            // 
+            // timer1
+            // 
+            timer1.Enabled = true;
+            timer1.Interval = 40;
+            timer1.Tick += timer1_Tick;
+            // 
+            // picDisplay
+            // 
+            picDisplay.Dock = DockStyle.Fill;
+            picDisplay.Location = new Point(0, 0);
+            picDisplay.Name = "picDisplay";
+            picDisplay.Size = new Size(800, 450);
+            picDisplay.TabIndex = 0;
+            picDisplay.TabStop = false;
+            // 
+            // Form1
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(800, 450);
+            Controls.Add(picDisplay);
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Name = "Form1";
+            Text = "Particle system";
+            ((System.ComponentModel.ISupportInitialize)picDisplay).EndInit();
+            ResumeLayout(false);
         }
 
         #endregion
+
+        private System.Windows.Forms.Timer timer1;
+        private PictureBox picDisplay;
     }
 }
