@@ -4,6 +4,7 @@ public class ParticleEmitter
 {
     List<Particle> particles = new();
     public int MousePositionX;
+    public int ParticlesCount = 500;
     public int MousePositionY;
     public float GravitationX = 0;
     public float GravitationY = 0; // пусть гравитация будет силой один пиксель за такт, нам хватит
@@ -41,7 +42,7 @@ public class ParticleEmitter
         // генерирую не более 10 штук за тик
         for (var i = 0; i < 10; ++i)
         {
-            if (particles.Count > 500) return; // пока частиц меньше 500 генерируем новые
+            if (particles.Count > ParticlesCount) return; // пока частиц меньше 500 генерируем новые
             var particle = new ParticleColorful();
             // ну и цвета меняем
             particle.FromColor = Color.Yellow;
