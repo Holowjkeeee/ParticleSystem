@@ -13,8 +13,9 @@ internal class Particle
     public float X; // X координата положения частицы в пространстве
     public float Y; // Y координата положения частицы в пространстве
 
-    public float Direction; // направление движения
-    public float Speed; // скорость перемещения
+    public double Direction; // направление движения
+    public float SpeedX; // скорость перемещения по оси X
+    public float SpeedY; // скорость перемещения по оси Y
     public float Life;
 
     // добавили генератор случайных чисел
@@ -25,7 +26,11 @@ internal class Particle
     {
         // я не трогаю координаты X, Y потому что хочу, чтобы все частицы возникали из одного места
         Direction = Rand.Next(360);
-        Speed = 1 + Rand.Next(10);
+        var speed = 1 + Rand.Next(10);
+
+        // рассчитываем вектор скорости
+        SpeedX = (float)(Math.Cos(Direction / 180 * Math.PI) * speed);
+        SpeedY = -(float)(Math.Sin(Direction / 180 * Math.PI) * speed);
         Radius = 2 + Rand.Next(10);
         Life = 20 + Rand.Next(100); // Добавили исходный запас здоровья от 20 до 120
     }

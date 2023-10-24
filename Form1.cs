@@ -34,19 +34,24 @@ public partial class Form1 : Form
                 //particle.X = picDisplay.Image.Width / 2;
                 //particle.Y = picDisplay.Image.Height / 2;
                 // новое начальное расположение частицы Ч это то, куда указывает курсор
+
                 particle.X = MousePositionX;
                 particle.Y = MousePositionY;
-                // делаю рандомное направление, скорость и размер
-                particle.Direction = Particle.Rand.Next(360);
-                particle.Speed = 1 + Particle.Rand.Next(10);
+                /* Ё“ќ ƒќЅј¬Ћяё, тут сброс состо€ни€ частицы */
+                var direction = (double)Particle.Rand.Next(360);
+                var speed = 1 + Particle.Rand.Next(10);
+
+                particle.SpeedX = (float)(Math.Cos(direction / 180 * Math.PI) * speed);
+                particle.SpeedY = -(float)(Math.Sin(direction / 180 * Math.PI) * speed);
+
                 particle.Radius = 2 + Particle.Rand.Next(10);
             }
             else
             {
-                // а это наш старый код
-                var directionInRadians = particle.Direction / 180 * Math.PI;
-                particle.X += (float)(particle.Speed * Math.Cos(directionInRadians));
-                particle.Y -= (float)(particle.Speed * Math.Sin(directionInRadians));
+                // и добавл€ем новый, собственно он даже проще становитс€, 
+                // так как теперь мы храним вектор скорости в €вном виде и его не надо пересчитывать
+                particle.X += particle.SpeedX;
+                particle.Y += particle.SpeedY;
             }
         }
 
