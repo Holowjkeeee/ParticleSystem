@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace ParticleSystem;
 
-namespace ParticleSystem;
-
-class ParticleEmitter
+public class ParticleEmitter
 {
     List<Particle> particles = new();
     public int MousePositionX;
@@ -23,23 +17,7 @@ class ParticleEmitter
             // если здоровье кончилось
             if (particle.Life < 0)
             {
-                // восстанавливаю здоровье
-                particle.Life = 20 + Particle.Rand.Next(100);
-                // перемещаю частицу в центр
-                //particle.X = picDisplay.Image.Width / 2;
-                //particle.Y = picDisplay.Image.Height / 2;
-                // новое начальное расположение частицы — это то, куда указывает курсор
-
-                particle.X = MousePositionX;
-                particle.Y = MousePositionY;
-                /* ЭТО ДОБАВЛЯЮ, тут сброс состояния частицы */
-                var direction = (double)Particle.Rand.Next(360);
-                var speed = 1 + Particle.Rand.Next(10);
-
-                particle.SpeedX = (float)(Math.Cos(direction / 180 * Math.PI) * speed);
-                particle.SpeedY = -(float)(Math.Sin(direction / 180 * Math.PI) * speed);
-
-                particle.Radius = 2 + Particle.Rand.Next(10);
+                ResetParticle(particle); // заменили этот блок на вызов сброса частицы 
             }
             else
             {
@@ -68,8 +46,9 @@ class ParticleEmitter
             // ну и цвета меняем
             particle.FromColor = Color.Yellow;
             particle.ToColor = Color.FromArgb(0, Color.Magenta);
-            particle.X = MousePositionX;
-            particle.Y = MousePositionY;
+
+            ResetParticle(particle); // добавили вызов ResetParticle
+
             particles.Add(particle);
 
         }
@@ -88,6 +67,22 @@ class ParticleEmitter
         {
            point.Render(g);
         }
+    }
+
+    // добавил новый метод, виртуальным, чтобы переопределять можно было
+    public virtual void ResetParticle(Particle particle)
+    {
+        particle.Life = 20 + Particle.Rand.Next(100);
+        particle.X = MousePositionX;
+        particle.Y = MousePositionY;
+
+        var direction = (double)Particle.Rand.Next(360);
+        var speed = 1 + Particle.Rand.Next(10);
+
+        particle.SpeedX = (float)(Math.Cos(direction / 180 * Math.PI) * speed);
+        particle.SpeedY = -(float)(Math.Sin(direction / 180 * Math.PI) * speed);
+
+        particle.Radius = 2 + Particle.Rand.Next(10);
     }
 }
 
