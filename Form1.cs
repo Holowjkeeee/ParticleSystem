@@ -58,7 +58,7 @@ public partial class Form1 : Form
         g.Clear(Color.Black); // добавил очистку
         emitter.Render(g); // а тут теперь рендерим через эмиттер
 
-        
+
         picDisplay.Invalidate();// обновить picDisplay
     }
 
@@ -66,5 +66,11 @@ public partial class Form1 : Form
     {
         emitter.MousePositionX = e.X;
         emitter.MousePositionY = e.Y;
+    }
+
+    private void tbDirection_Scroll(object sender, EventArgs e)
+    {
+        emitter.Direction = tbDirection.Value;
+        lblDirection.Text = $"{tbDirection.Value}°"; // добавил вывод значения
     }
 }
