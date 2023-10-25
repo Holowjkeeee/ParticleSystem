@@ -13,18 +13,15 @@ public class ParticleEmitter
     public int LifeMin = 20; // минимальное время жизни частицы
     public int LifeMax = 100; // максимальное время жизни частицы
     public int ParticlesPerTick = 1; // добавил новое поле
-
     public Color ColorFrom = Color.White; // начальный цвет частицы
     public Color ColorTo = Color.FromArgb(0, Color.Black); // конечный цвет частиц
-
-
-    List<Particle> particles = new();
     public int MousePositionX;
-    public int ParticlesCount = 500;
     public int MousePositionY;
     public float GravitationX = 0;
     public float GravitationY = 0; // пусть гравитация будет силой один пиксель за такт, нам хватит
     public List<IImpactPoint> impactPoints = new (); // тут буду хранится точки притяжения
+    public List<Particle> particles = new();
+    public int ParticlesCount = 500;
 
     public void UpdateState()
     {
@@ -34,7 +31,7 @@ public class ParticleEmitter
         {
             particle.Life -= 1; // уменьшаю здоровье
             // если здоровье кончилось
-            if (particle.Life <= 0) // если частицы умерла
+            if (particle.Life == 0) // если частицы умерла
             {
                 /* 
                 * то проверяем надо ли создать частицу
@@ -102,10 +99,10 @@ public class ParticleEmitter
         particle.Y = Y;
 
         var direction = Direction
-                        + (double)Particle.rand.Next(Spreading)
+                        + (double)Particle.Rand.Next(Spreading)
                         - Spreading / 2;
 
-        var speed = Particle.rand.Next(SpeedMin, SpeedMax);
+        var speed = Particle.Rand.Next(SpeedMin, SpeedMax);
 
         particle.SpeedX = (float)(Math.Cos(direction / 180 * Math.PI) * speed);
         particle.SpeedY = -(float)(Math.Sin(direction / 180 * Math.PI) * speed);

@@ -9,7 +9,7 @@ namespace ParticleSystem;
 
 public class Particle
 {
-    public int Radius; // радиус частицы
+    public float Radius; // радиус частицы
     public float X; // X координата положения частицы в пространстве
     public float Y; // Y координата положения частицы в пространстве
 
@@ -21,6 +21,11 @@ public class Particle
     // добавили генератор случайных чисел
     public static Random Rand = new();
 
+    public float GenerateFloat(float min, float max)
+    {
+        return (float)(min + Rand.NextDouble() * max);
+    }
+
     // конструктор по умолчанию будет создавать кастомную частицу
     public Particle()
     {
@@ -31,8 +36,8 @@ public class Particle
         // рассчитываем вектор скорости
         SpeedX = (float)(Math.Cos(Direction / 180 * Math.PI) * speed);
         SpeedY = -(float)(Math.Sin(Direction / 180 * Math.PI) * speed);
-        Radius = 2 + Rand.Next(10);
-        Life = 20 + Rand.Next(100); // Добавили исходный запас здоровья от 20 до 120
+        Radius = GenerateFloat(2f, 10f);
+        Life = GenerateFloat(20f, 120f); // Добавили исходный запас здоровья от 20 до 120
     }
 
     // конструктор по умолчанию будет создавать кастомную частицу

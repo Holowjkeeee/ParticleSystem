@@ -8,12 +8,20 @@ public partial class Form1 : Form
         // прив€зал изображение
         picDisplay.Image = new Bitmap(picDisplay.Width, picDisplay.Height);
 
-           // а тут теперь вручную создаем
-            emitter = new TopEmitter
-            {
-                Width = picDisplay.Width,
-                GravitationY = 0.25f
-            };
+        this.emitter = new ParticleEmitter() // создаю эмиттер и прив€зываю его к полю emitter
+        {
+            Direction = 0,
+            Spreading = 10,
+            SpeedMin = 10,
+            SpeedMax = 10,
+            ColorFrom = Color.Gold,
+            ColorTo = Color.FromArgb(0, Color.Red),
+            ParticlesPerTick = 10,
+            X = picDisplay.Width / 2,
+            Y = picDisplay.Height / 2,
+        };
+
+        emitters.Add(this.emitter); // все равно добавл€ю в список emitters, чтобы он рендерилс€ и обновл€лс€
 
         //// гравитон
         //emitter.impactPoints.Add(new GravityPoint
@@ -38,24 +46,24 @@ public partial class Form1 : Form
     }
 
     private ParticleEmitter emitter;
+    List<ParticleEmitter> emitters = new List<ParticleEmitter>();
 
 
     private void timer1_Tick(object sender, EventArgs e)
     {
-        emitter.UpdateState(); // тут теперь обновл€ем эмиттер
+        emitter.UpdateState();
 
         using var g = Graphics.FromImage(picDisplay.Image);
         // рисую на изображении сколько насчитал
         g.Clear(Color.Black); // добавил очистку
         emitter.Render(g); // а тут теперь рендерим через эмиттер
 
-        // обновить picDisplay
-        picDisplay.Invalidate();
+        
+        picDisplay.Invalidate();// обновить picDisplay
     }
 
     private void picDisplay_MouseMove(object sender, MouseEventArgs e)
     {
-        // а тут в эмиттер передаем положение мыфки
         emitter.MousePositionX = e.X;
         emitter.MousePositionY = e.Y;
     }
