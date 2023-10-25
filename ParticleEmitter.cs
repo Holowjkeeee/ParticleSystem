@@ -45,6 +45,12 @@ public class ParticleEmitter
             }
             else
             {
+                // и добавляем новый, собственно он даже проще становится, 
+                // так как теперь мы храним вектор скорости в явном виде и его не надо пересчитывать
+                particle.X += particle.SpeedX;
+                particle.Y += particle.SpeedY;
+
+                particle.Life -= 1;
                 // каждая точка по-своему воздействует на вектор скорости
                 foreach (var point in impactPoints)
                 {
@@ -54,10 +60,7 @@ public class ParticleEmitter
                 // гравитация воздействует на вектор скорости, поэтому пересчитываем его
                 particle.SpeedX += GravitationX;
                 particle.SpeedY += GravitationY;
-                // и добавляем новый, собственно он даже проще становится, 
-                // так как теперь мы храним вектор скорости в явном виде и его не надо пересчитывать
-                particle.X += particle.SpeedX;
-                particle.Y += particle.SpeedY;
+                
             }
         }
 
