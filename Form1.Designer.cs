@@ -107,6 +107,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
             Text = "Particle system";
+            Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)picDisplay).EndInit();
             ((System.ComponentModel.ISupportInitialize)tbDirection).EndInit();
             ((System.ComponentModel.ISupportInitialize)tbGraviton1).EndInit();

@@ -1,6 +1,4 @@
-﻿
-
-namespace ParticleSystem;
+﻿namespace ParticleSystem;
 
 public class TopEmitter : ParticleEmitter
 {
@@ -8,13 +6,12 @@ public class TopEmitter : ParticleEmitter
 
     public override void ResetParticle(Particle particle)
     {
-        base.ResetParticle(particle); // вызываем базовый сброс частицы, там жизнь переопределяется и все такое
+        base.ResetParticle(particle);
 
-        // а теперь тут уже подкручиваем параметры движения
-        particle.X = Particle.Rand.Next(Width); // позиция X -- произвольная точка от 0 до Width
-        particle.Y = 0;  // ноль -- это верх экрана 
+        particle.X = Particle.Rand.Next(Width);
+        particle.Y = 0;
 
-        particle.SpeedY = 1; // падаем вниз по умолчанию
-        particle.SpeedX = Particle.Rand.Next(-2, 2); // разброс влево и вправа у частиц 
+        particle.SpeedY = 1;
+        particle.SpeedX = Particle.Rand.Next(-2, 2); // разброс влево и вправо
     }
 }

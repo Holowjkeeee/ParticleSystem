@@ -5,10 +5,9 @@ public partial class Form1 : Form
     public Form1()
     {
         InitializeComponent();
-        // привязал изображение
         picDisplay.Image = new Bitmap(picDisplay.Width, picDisplay.Height);
 
-        this.emitter = new ParticleEmitter() // создаю эмиттер и привязываю его к полю emitter
+        this.emitter = new ParticleEmitter()
         {
             Direction = 0,
             Spreading = 10,
@@ -21,9 +20,8 @@ public partial class Form1 : Form
             Y = picDisplay.Height / 2,
         };
 
-        emitters.Add(this.emitter); // все равно добавляю в список emitters, чтобы он рендерился и обновлялся
+        emitters.Add(this.emitter);
 
-        // привязываем гравитоны к полям
         point1 = new GravityPoint
         {
             X = picDisplay.Width / 2 + 100,
@@ -35,25 +33,21 @@ public partial class Form1 : Form
             Y = picDisplay.Height / 2,
         };
 
-        // привязываем поля к эмиттеру
         emitter.impactPoints.Add(point1);
         emitter.impactPoints.Add(point2);
 
-        //// гравитон
         //emitter.impactPoints.Add(new GravityPoint
         //{
         //    X = (float)(picDisplay.Width * 0.25),
         //    Y = picDisplay.Height / 2
         //});
 
-        //// в центре антигравитон
         //emitter.impactPoints.Add(new AntiGravityPoint
         //{
         //    X = picDisplay.Width / 2,
         //    Y = picDisplay.Height / 2
         //});
 
-        //// снова гравитон
         //emitter.impactPoints.Add(new GravityPoint
         //{
         //    X = (float)(picDisplay.Width * 0.75),
@@ -61,11 +55,11 @@ public partial class Form1 : Form
         //});
     }
 
-    GravityPoint point1; // добавил поле под первую точку
-    GravityPoint point2; // добавил поле под вторую точку
+    GravityPoint point1;
+    GravityPoint point2;
 
     private ParticleEmitter emitter;
-    List<ParticleEmitter> emitters = new List<ParticleEmitter>();
+    List<ParticleEmitter> emitters = new();
 
 
     private void timer1_Tick(object sender, EventArgs e)
@@ -73,12 +67,19 @@ public partial class Form1 : Form
         emitter.UpdateState();
 
         using var g = Graphics.FromImage(picDisplay.Image);
-        // рисую на изображении сколько насчитал
-        g.Clear(Color.Black); // добавил очистку
-        emitter.Render(g); // а тут теперь рендерим через эмиттер
+        ClearScreen(g, Color.Black);
 
+        foreach (var emitter in emitters)
+        {
+            emitter.Render(g);
+        }
 
-        picDisplay.Invalidate();// обновить picDisplay
+        picDisplay.Invalidate(); // обновить picDisplay
+    }
+
+    public void ClearScreen(Graphics g, Color color)
+    {
+        g.Clear(color);
     }
 
     private void picDisplay_MouseMove(object sender, MouseEventArgs e)
@@ -88,9 +89,7 @@ public partial class Form1 : Form
             emitter.MousePositionX = e.X;
             emitter.MousePositionY = e.Y;
         }
-        
 
-        // а тут передаем положение мыши, в положение гравитона
         point2.X = e.X;
         point2.Y = e.Y;
     }
@@ -110,5 +109,10 @@ public partial class Form1 : Form
     private void tbGraviton2_Scroll(object sender, EventArgs e)
     {
         point2.Power = tbGraviton2.Value;
+    }
+
+    private void Form1_Load(object sender, EventArgs e)
+    {
+
     }
 }

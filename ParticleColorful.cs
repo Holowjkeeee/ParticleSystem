@@ -1,5 +1,4 @@
-﻿
-namespace ParticleSystem;
+﻿namespace ParticleSystem;
 
 class ParticleColorful : Particle
 {
