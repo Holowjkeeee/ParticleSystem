@@ -1,10 +1,14 @@
+using System.Diagnostics.Metrics;
+using System.Reflection;
+
 namespace ParticleSystem;
 
 public partial class Form1 : Form
 {
 
 
-    public Color BackgroundColor = Color.White;
+    public Color BackgroundColor = Color.Black;
+    public int Interval = 40;
 
     public Form1()
     {
@@ -13,10 +17,10 @@ public partial class Form1 : Form
 
         emitter = new ParticleEmitter()
         {
-            Direction = 5,
-            Spreading = 130,
-            SpeedMin = 10,
-            SpeedMax = 10,
+            Direction = 2,
+            Spreading = 120,
+            SpeedMin = 5,
+            SpeedMax = 12,
             ColorFrom = Color.Gold,
             ColorTo = Color.FromArgb(0, Color.Red),
             ParticlesPerTick = 10,
@@ -64,7 +68,6 @@ public partial class Form1 : Form
 
     private ParticleEmitter emitter;
     List<ParticleEmitter> emitters = new();
-
 
     private void timer1_Tick(object sender, EventArgs e)
     {
@@ -124,8 +127,28 @@ public partial class Form1 : Form
 
     private void DebugSpeed_TrackBar_Scroll(object sender, EventArgs e)
     {
+        // min - 
+        // max - 
+        // convert fps to interval
         DebugNextStep_Button.Visible = DebugSpeed_TrackBar.Value == 0;
         DebugPreviousStep_Button.Visible = DebugSpeed_TrackBar.Value == 0;
+        if (DebugSpeed_TrackBar.Value != 0)
+        {
+            float maxFPS = int.Parse(DebugMaxFPS_TextBox.Text);
+            int currentFPS = (int)(DebugSpeed_TrackBar.Value / 100f * maxFPS);
+            try
+            {
+                timer1.Interval = 1000 / currentFPS;
+                CurrentFPS_Label.Text = currentFPS.ToString();
+                timer1.Enabled = true;
+            }
+            catch(DivideByZeroException ) { }
+        }
+        else
+        {
+            CurrentFPS_Label.Text = "0";
+            timer1.Enabled = false;
+        }
     }
 
     private void ShowSpeedVectors_CheckBox_CheckedChanged(object sender, EventArgs e)
@@ -134,5 +157,11 @@ public partial class Form1 : Form
         {
             emitter.IsSpeedVectorVisible = ShowSpeedVectors_CheckBox.Checked;
         }
+    }
+
+    private void Form1_SizeChanged(object sender, EventArgs e)
+    {
+        picDisplay.Width = Form1.ActiveForm.Size.Width;
+        picDisplay.Image = new Bitmap(Form1.ActiveForm.Size.Width, picDisplay.Height);
     }
 }

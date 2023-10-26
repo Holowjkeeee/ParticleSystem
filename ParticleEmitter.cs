@@ -122,10 +122,10 @@ public class ParticleEmitter
         {
             particle.Draw(g);
         }
-        
+
         foreach (var point in impactPoints)
         {
-           point.Render(g);
+            point.Render(g);
         }
     }
 

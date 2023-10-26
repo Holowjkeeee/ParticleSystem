@@ -5,22 +5,23 @@ class ParticleColorful : Particle
     public Color FromColor;
     public Color ToColor;
 
-    public static Color MixColor(Color color1, Color color2, float k)
+    public static Color MixColor(Color fromColor, Color toColor, float k)
     {
         return Color.FromArgb(
-            Math.Max(0, (int)(color2.A * k + color1.A * (1 - k))),
-            Math.Max(0, (int)(color2.R * k + color1.R * (1 - k))),
-            Math.Max(0, (int)(color2.G * k + color1.G * (1 - k))),
-            Math.Max(0, (int)(color2.B * k + color1.B * (1 - k)))
+            (int)(toColor.A * (1 - k) + fromColor.A * k),
+            (int)(toColor.R * (1 - k) + fromColor.R * k),
+             (int)(toColor.G * (1 - k) + fromColor.G * k),
+             (int)(toColor.B * (1 - k) + fromColor.B * k)
         );
     }
-
+    
     public override void Draw(Graphics g)
     {
         float k = Math.Min(1f, Life / 100);
 
         // k уменьшается от 1 до 0, то порядок цветов обратный
-        var color = MixColor(ToColor, FromColor, k);
+        var color = MixColor(FromColor, ToColor, k); 
+        //color = Color.FromArgb(100, Color.Blue);
 
         g.FillEllipse(
             new SolidBrush(color),

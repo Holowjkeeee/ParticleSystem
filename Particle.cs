@@ -24,7 +24,7 @@ public class Particle
     public float SpeedY;
     
     /** Продолжительность жизни частицы в условных единицах */
-    public int Life;
+    public float Life;
 
     /** Генератор случайных чисел */
     public static readonly Random Rand = new();
@@ -63,10 +63,8 @@ public class Particle
         var speed = 1 + Rand.Next(10);
 
         // вектор скорости
-        //SpeedX = (float)(Math.Cos(Direction / 180 * Math.PI) * speed);
-        SpeedX = 5;
-        SpeedY = 5;
-        //SpeedY = -(float)(Math.Sin(Direction / 180 * Math.PI) * speed);
+        SpeedX = (float)(Math.Cos(Direction / 180 * Math.PI) * speed);
+        SpeedY = -(float)(Math.Sin(Direction / 180 * Math.PI) * speed);
         
         Radius = GetRandomFloat(2f, 10f);
         Life = Rand.Next(20, 120); // Исходный запас здоровья от 20 до 120
@@ -95,10 +93,10 @@ public class Particle
         var color = Color.FromArgb(alpha, Color.Blue);
 
         g.FillEllipse(
-            new SolidBrush(color), 
-            X - Radius, 
-            Y - Radius, 
-            Radius * 2, 
+            new SolidBrush(color),
+            X - Radius,
+            Y - Radius,
+            Radius * 2,
             Radius * 2
         );
 

@@ -41,12 +41,13 @@
             Debug_Group = new GroupBox();
             ShowSpeedVectors_CheckBox = new CheckBox();
             label4 = new Label();
-            DebugMaxSpeed_TextBox = new TextBox();
+            DebugMaxFPS_TextBox = new TextBox();
             label3 = new Label();
             label2 = new Label();
             label1 = new Label();
             DebugPreviousStep_Button = new Button();
             DebugSpeed_TrackBar = new TrackBar();
+            CurrentFPS_Label = new Label();
             ((System.ComponentModel.ISupportInitialize)picDisplay).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tbDirection).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tbGraviton1).BeginInit();
@@ -63,10 +64,9 @@
             // 
             // picDisplay
             // 
-            picDisplay.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            picDisplay.Location = new Point(48, 28);
+            picDisplay.Location = new Point(0, 0);
             picDisplay.Name = "picDisplay";
-            picDisplay.Size = new Size(929, 326);
+            picDisplay.Size = new Size(1034, 342);
             picDisplay.TabIndex = 0;
             picDisplay.TabStop = false;
             picDisplay.MouseMove += picDisplay_MouseMove;
@@ -113,7 +113,7 @@
             // DebugNextStep_Button
             // 
             DebugNextStep_Button.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            DebugNextStep_Button.Location = new Point(136, 147);
+            DebugNextStep_Button.Location = new Point(163, 147);
             DebugNextStep_Button.Name = "DebugNextStep_Button";
             DebugNextStep_Button.Size = new Size(112, 32);
             DebugNextStep_Button.TabIndex = 5;
@@ -134,9 +134,10 @@
             // 
             // Debug_Group
             // 
+            Debug_Group.Controls.Add(CurrentFPS_Label);
             Debug_Group.Controls.Add(ShowSpeedVectors_CheckBox);
             Debug_Group.Controls.Add(label4);
-            Debug_Group.Controls.Add(DebugMaxSpeed_TextBox);
+            Debug_Group.Controls.Add(DebugMaxFPS_TextBox);
             Debug_Group.Controls.Add(label3);
             Debug_Group.Controls.Add(label2);
             Debug_Group.Controls.Add(label1);
@@ -145,7 +146,7 @@
             Debug_Group.Controls.Add(DebugNextStep_Button);
             Debug_Group.Location = new Point(37, 493);
             Debug_Group.Name = "Debug_Group";
-            Debug_Group.Size = new Size(432, 185);
+            Debug_Group.Size = new Size(289, 185);
             Debug_Group.TabIndex = 7;
             Debug_Group.TabStop = false;
             Debug_Group.Text = "Debug";
@@ -165,24 +166,24 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(121, 70);
+            label4.Location = new Point(165, 26);
             label4.Name = "label4";
-            label4.Size = new Size(64, 15);
+            label4.Size = new Size(52, 15);
             label4.TabIndex = 13;
-            label4.Text = "Max speed";
+            label4.Text = "Max FPS";
             // 
-            // DebugMaxSpeed_TextBox
+            // DebugMaxFPS_TextBox
             // 
-            DebugMaxSpeed_TextBox.Location = new Point(191, 67);
-            DebugMaxSpeed_TextBox.Name = "DebugMaxSpeed_TextBox";
-            DebugMaxSpeed_TextBox.Size = new Size(52, 23);
-            DebugMaxSpeed_TextBox.TabIndex = 12;
-            DebugMaxSpeed_TextBox.Text = "40";
+            DebugMaxFPS_TextBox.Location = new Point(223, 22);
+            DebugMaxFPS_TextBox.Name = "DebugMaxFPS_TextBox";
+            DebugMaxFPS_TextBox.Size = new Size(52, 23);
+            DebugMaxFPS_TextBox.TabIndex = 12;
+            DebugMaxFPS_TextBox.Text = "60";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(217, 126);
+            label3.Location = new Point(250, 126);
             label3.Name = "label3";
             label3.Size = new Size(25, 15);
             label3.TabIndex = 11;
@@ -224,11 +225,19 @@
             DebugSpeed_TrackBar.Location = new Point(6, 96);
             DebugSpeed_TrackBar.Maximum = 100;
             DebugSpeed_TrackBar.Name = "DebugSpeed_TrackBar";
-            DebugSpeed_TrackBar.Size = new Size(242, 45);
+            DebugSpeed_TrackBar.Size = new Size(269, 45);
             DebugSpeed_TrackBar.TabIndex = 6;
             DebugSpeed_TrackBar.TickStyle = TickStyle.None;
             DebugSpeed_TrackBar.Value = 100;
             DebugSpeed_TrackBar.Scroll += DebugSpeed_TrackBar_Scroll;
+            // 
+            // CurrentFPS_Label
+            // 
+            CurrentFPS_Label.AutoSize = true;
+            CurrentFPS_Label.Location = new Point(223, 70);
+            CurrentFPS_Label.Name = "CurrentFPS_Label";
+            CurrentFPS_Label.Size = new Size(0, 15);
+            CurrentFPS_Label.TabIndex = 15;
             // 
             // Form1
             // 
@@ -245,6 +254,7 @@
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
             Text = "Particle system";
+            SizeChanged += Form1_SizeChanged;
             ((System.ComponentModel.ISupportInitialize)picDisplay).EndInit();
             ((System.ComponentModel.ISupportInitialize)tbDirection).EndInit();
             ((System.ComponentModel.ISupportInitialize)tbGraviton1).EndInit();
@@ -274,6 +284,7 @@
         private Label label3;
         private CheckBox ShowSpeedVectors_CheckBox;
         private Label label4;
-        private TextBox DebugMaxSpeed_TextBox;
+        private TextBox DebugMaxFPS_TextBox;
+        private Label CurrentFPS_Label;
     }
 }
