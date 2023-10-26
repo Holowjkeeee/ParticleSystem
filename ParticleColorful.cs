@@ -20,13 +20,17 @@ class ParticleColorful : Particle
         float k = Math.Min(1f, Life / 100);
 
         // k уменьшается от 1 до 0, то порядок цветов обратный
-        Console.WriteLine("k: " + k.ToString());
         var color = MixColor(ToColor, FromColor, k);
-        var b = new SolidBrush(color);
 
-        g.FillEllipse(b, X - Radius, Y - Radius, Radius * 2, Radius * 2);
+        g.FillEllipse(
+            new SolidBrush(color),
+            X - Radius, 
+            Y - Radius, 
+            Radius * 2, 
+            Radius * 2
+        );
 
-        b.Dispose();
+        DrawSpeedVector(g, (int)(255 * (Life / 100)));
     }
 }
 

@@ -2,6 +2,10 @@ namespace ParticleSystem;
 
 public partial class Form1 : Form
 {
+
+
+    public Color BackgroundColor = Color.White;
+
     public Form1()
     {
         InitializeComponent();
@@ -9,8 +13,8 @@ public partial class Form1 : Form
 
         emitter = new ParticleEmitter()
         {
-            Direction = 0,
-            Spreading = 10,
+            Direction = 5,
+            Spreading = 130,
             SpeedMin = 10,
             SpeedMax = 10,
             ColorFrom = Color.Gold,
@@ -33,8 +37,8 @@ public partial class Form1 : Form
             Y = picDisplay.Height / 2,
         };
 
-        emitter.impactPoints.Add(point1);
-        emitter.impactPoints.Add(point2);
+        //emitter.impactPoints.Add(point1);
+        //emitter.impactPoints.Add(point2);
 
         //emitter.impactPoints.Add(new GravityPoint
         //{
@@ -67,7 +71,7 @@ public partial class Form1 : Form
         emitter.UpdateState();
 
         using var g = Graphics.FromImage(picDisplay.Image);
-        ClearScreen(g, Color.Black);
+        ClearScreen(g, BackgroundColor);
 
         foreach (var emitter in emitters)
         {
@@ -84,11 +88,11 @@ public partial class Form1 : Form
 
     private void picDisplay_MouseMove(object sender, MouseEventArgs e)
     {
-        foreach (var _emitter in emitters)
-        {
-            _emitter.X = e.X;
-            _emitter.Y = e.Y;
-        }
+        //foreach (var _emitter in emitters)
+        //{
+        //    _emitter.X = e.X;
+        //    _emitter.Y = e.Y;
+        //}
 
         point2.X = e.X;
         point2.Y = e.Y;
@@ -111,8 +115,24 @@ public partial class Form1 : Form
         point2.Power = tbGraviton2.Value;
     }
 
-    private void Form1_Load(object sender, EventArgs e)
+    private void DebugMode_CheckBox_CheckedChanged(object sender, EventArgs e)
     {
+        Debug_Group.Visible = DebugMode_CheckBox.Checked;
+        // todo reset all debug changes on debug off
+    }
 
+
+    private void DebugSpeed_TrackBar_Scroll(object sender, EventArgs e)
+    {
+        DebugNextStep_Button.Visible = DebugSpeed_TrackBar.Value == 0;
+        DebugPreviousStep_Button.Visible = DebugSpeed_TrackBar.Value == 0;
+    }
+
+    private void ShowSpeedVectors_CheckBox_CheckedChanged(object sender, EventArgs e)
+    {
+        foreach (var emitter in emitters)
+        {
+            emitter.IsSpeedVectorVisible = ShowSpeedVectors_CheckBox.Checked;
+        }
     }
 }

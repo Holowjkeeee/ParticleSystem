@@ -24,10 +24,20 @@ public class Particle
     public float SpeedY;
     
     /** Продолжительность жизни частицы в условных единицах */
-    public float Life;
+    public int Life;
 
     /** Генератор случайных чисел */
     public static readonly Random Rand = new();
+
+    /** Цвет вектора скорости */
+    public Color SpeedVectorColor = Color.White;
+
+    /** Длина вектора скорости */
+    public float SpeedVectorLength = 5;
+
+    /** Видимость вектора скорости */
+    public bool IsSpeedVectorVisible = false;
+
 
     private float GetRandomFloat(float min, float max)
     {
@@ -47,17 +57,32 @@ public class Particle
         return min + Rand.NextDouble() * (max - min);
     }
     
-    protected Particle()
+    public Particle()
     {
         Direction = Rand.Next(360);
         var speed = 1 + Rand.Next(10);
 
         // вектор скорости
-        SpeedX = (float)(Math.Cos(Direction / 180 * Math.PI) * speed);
-        SpeedY = -(float)(Math.Sin(Direction / 180 * Math.PI) * speed);
+        //SpeedX = (float)(Math.Cos(Direction / 180 * Math.PI) * speed);
+        SpeedX = 5;
+        SpeedY = 5;
+        //SpeedY = -(float)(Math.Sin(Direction / 180 * Math.PI) * speed);
         
         Radius = GetRandomFloat(2f, 10f);
-        Life = GetRandomFloat(20f, 120f); // Исходный запас здоровья от 20 до 120
+        Life = Rand.Next(20, 120); // Исходный запас здоровья от 20 до 120
+    }
+
+    public void DrawSpeedVector(Graphics g, int alpha)
+    {
+        if (!IsSpeedVectorVisible) return;
+        
+        g.DrawLine(
+            new Pen(Color.FromArgb(alpha, SpeedVectorColor)),
+            X,
+            Y,
+            X + SpeedX * SpeedVectorLength,
+            Y + SpeedY * SpeedVectorLength
+        );
     }
 
     public virtual void Draw(Graphics g)
@@ -66,16 +91,20 @@ public class Particle
         float alphaCoefficient = Math.Min(1f, Life / 100);
         // альфа канал от 0 до 255
         int alpha = (int)(alphaCoefficient * 255);
-        
-        // остальное все так же
+
+        var color = Color.FromArgb(alpha, Color.Blue);
+
         g.FillEllipse(
-            new SolidBrush(
-                    Color.FromArgb(alpha, Color.Black)
-                ), 
+            new SolidBrush(color), 
             X - Radius, 
             Y - Radius, 
             Radius * 2, 
-            Radius * 2);
+            Radius * 2
+        );
+
+        DrawSpeedVector(g, alpha);
     }
+
+    
 }
 

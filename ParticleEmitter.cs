@@ -60,6 +60,10 @@ public class ParticleEmitter
     
     /** Конечный цвет частиц */
     public Color ColorTo   = Color.FromArgb(0, Color.Black);
+
+    /** Видимость вектора скорости */
+    public bool IsSpeedVectorVisible = false;
+
     #endregion
 
     public void UpdateState()
@@ -68,7 +72,7 @@ public class ParticleEmitter
 
         foreach (var particle in particles)
         {
-            particle.Life -= 1;
+            
             if (particle.Life == 0) // если частицы умерла
             {
                 // то проверяем надо ли создать частицу
@@ -81,11 +85,13 @@ public class ParticleEmitter
                 }
                 continue;
             }
-
+            particle.Life -= 1;
             particle.X += particle.SpeedX;
             particle.Y += particle.SpeedY;
 
-            particle.Life -= 1;
+            
+            particle.IsSpeedVectorVisible = IsSpeedVectorVisible;
+            Console.WriteLine("shtsht");
 
             // каждая точка по-своему воздействует на вектор скорости
             foreach (var point in impactPoints)
@@ -139,14 +145,16 @@ public class ParticleEmitter
         particle.SpeedY = -(float)(Math.Sin(direction / 180 * Math.PI) * speed);
 
         particle.Radius = Particle.Rand.Next(RadiusMin, RadiusMax);
+        particle.IsSpeedVectorVisible = IsSpeedVectorVisible;
     }
 
-    protected virtual Particle CreateParticle()
+    public virtual Particle CreateParticle()
     {
         var particle = new ParticleColorful
         {
             FromColor = ColorFrom,
-            ToColor = ColorTo
+            ToColor = ColorTo,
+            IsSpeedVectorVisible = IsSpeedVectorVisible
         };
 
         return particle;
