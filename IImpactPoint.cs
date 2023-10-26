@@ -1,23 +1,42 @@
 ﻿namespace ParticleSystem;
 
+/**
+ * Базовый класс для точки
+ */
 public abstract class IImpactPoint
 {
-    public float X; // ну точка же, вот и две координаты
+    /** Координата X */
+    public float X;
+    
+    /** координата Y */
     public float Y;
 
-    // абстрактный метод с помощью которого будем изменять состояние частиц
-    // например притягивать
+    /** Ширина точки */
+    public float width = 10;
+
+    /** Высота точки */
+    public float height = 10;
+
+    /** Цвет точки */
+    public Color Color = Color.Red;
+    
+    /**
+     * Метод воздействия точки на частицу particle
+     */
     public abstract void ImpactParticle(Particle particle);
 
-    // базовый класс для отрисовки точечки
+
+    /**
+     * Метод отрисовки точки
+     */
     public virtual void Render(Graphics g)
     {
         g.FillEllipse(
-            new SolidBrush(Color.Red),
-            X - 5,
-            Y - 5,
-            10,
-            10
+            brush: new SolidBrush(Color),
+            x: X - width/2,
+            y: Y - height/2,
+            width,
+            height
         );
     }
 }

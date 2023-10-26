@@ -1,72 +1,106 @@
 ﻿namespace ParticleSystem;
 
+/**
+ * Класс испускания частиц
+ */
 public class ParticleEmitter
 {
-    public int X; // координата X центра эмиттера, будем ее использовать вместо MousePositionX
-    public int Y; // соответствующая координата Y 
-    public int Direction = 0; // вектор направления в градусах куда сыпет эмиттер
-    public int Spreading = 360; // разброс частиц относительно Direction
-    public int SpeedMin = 1; // начальная минимальная скорость движения частицы
-    public int SpeedMax = 10; // начальная максимальная скорость движения частицы
-    public int RadiusMin = 2; // минимальный радиус частицы
-    public int RadiusMax = 10; // максимальный радиус частицы
-    public int LifeMin = 20; // минимальное время жизни частицы
-    public int LifeMax = 100; // максимальное время жизни частицы
-    public int ParticlesPerTick = 1; // добавил новое поле
-    public Color ColorFrom = Color.White; // начальный цвет частицы
-    public Color ColorTo = Color.FromArgb(0, Color.Black); // конечный цвет частиц
-    public int MousePositionX;
-    public int MousePositionY;
+
+    #region Properties & Fields
+    /** Координата X центра эмиттера */
+    public int X;
+    
+    /** Координата Y центра эмиттера */
+    public int Y;
+    
+    /** Вектор направления в градусах куда сыпет эмиттер */
+    public int Direction = 0;
+    
+    /** Разброс частиц относительно Direction */
+    public float Spreading = 360;
+    
+    /** Начальная минимальная скорость движения частицы */
+    public int SpeedMin = 1;
+    
+    /** Начальная максимальная скорость движения частицы */
+    public int SpeedMax = 10;
+    
+    /** Минимальный радиус частицы */
+    public int RadiusMin = 2;
+    
+    /** Максимальный радиус частицы */
+    public int RadiusMax = 10;
+    
+    /** Минимальное время жизни частицы */
+    public int LifeMin = 20;
+    
+    /** Максимальное время жизни частицы */
+    public int LifeMax = 100;
+    
+    /** Кол-во генерируемых за такт частиц */
+    public int ParticlesPerTick = 1;
+    
+    /** Сила гравитации по X */
     public float GravitationX = 0;
-    public float GravitationY = 0; // пусть гравитация будет силой один пиксель за такт, нам хватит
-    public List<IImpactPoint> impactPoints = new (); // тут буду хранится точки притяжения
-    public List<Particle> particles = new();
+    
+    /** Сила гравитации по Y */
+    public float GravitationY = 0;
+    
+    /** Общее количество частиц */
     public int ParticlesCount = 500;
+    
+    /** Точки притяжения */
+    public List<IImpactPoint> impactPoints = new();
+    
+    /** Частицы */
+    public List<Particle> particles = new();
+    
+    /** Начальный цвет частицы */
+    public Color ColorFrom = Color.White;
+    
+    /** Конечный цвет частиц */
+    public Color ColorTo   = Color.FromArgb(0, Color.Black);
+    #endregion
 
     public void UpdateState()
     {
-        int particlesToCreate = ParticlesPerTick; // фиксируем счетчик сколько частиц нам создавать за тик
+        var particlesToCreate = ParticlesPerTick; // фиксируем счетчик сколько частиц нам создавать за тик
 
         foreach (var particle in particles)
         {
-            particle.Life -= 1; // уменьшаю здоровье
-            // если здоровье кончилось
+            particle.Life -= 1;
             if (particle.Life == 0) // если частицы умерла
             {
-                /* 
-                * то проверяем надо ли создать частицу
-                */
+                // то проверяем надо ли создать частицу
                 if (particlesToCreate > 0)
                 {
-                    /* у нас как сброс частицы равносилен созданию частицы */
-                    particlesToCreate -= 1; // поэтому уменьшаем счётчик созданных частиц на 1
+                    // сброс частицы равносилен созданию частицы
+                    // поэтому уменьшаем счётчик созданных частиц на 1
+                    particlesToCreate -= 1; 
                     ResetParticle(particle);
                 }
+                continue;
             }
-            else
+
+            particle.X += particle.SpeedX;
+            particle.Y += particle.SpeedY;
+
+            particle.Life -= 1;
+
+            // каждая точка по-своему воздействует на вектор скорости
+            foreach (var point in impactPoints)
             {
-                // и добавляем новый, собственно он даже проще становится, 
-                // так как теперь мы храним вектор скорости в явном виде и его не надо пересчитывать
-                particle.X += particle.SpeedX;
-                particle.Y += particle.SpeedY;
-
-                particle.Life -= 1;
-                // каждая точка по-своему воздействует на вектор скорости
-                foreach (var point in impactPoints)
-                {
-                    point.ImpactParticle(particle);
-                }
-
-                // гравитация воздействует на вектор скорости, поэтому пересчитываем его
-                particle.SpeedX += GravitationX;
-                particle.SpeedY += GravitationY;
-                
+                point.ImpactParticle(particle);
             }
+
+            // перерасчет скорости под воздействием гравитации
+            particle.SpeedX += GravitationX;
+            particle.SpeedY += GravitationY;
+            
         }
 
-        // второй цикл меняем на while, 
-        // этот новый цикл также будет срабатывать только в самом начале работы эмиттера
-        // собственно пока не накопится критическая масса частиц
+        // цикл будет срабатывать только в самом начале работы эмиттера
+        // пока не накопится критическая масса частиц - ParticlesCount
         while (particlesToCreate >= 1)
         {
             particlesToCreate -= 1;
@@ -78,31 +112,25 @@ public class ParticleEmitter
 
     public void Render(Graphics g)
     {
-        // ну тут так и быть уж сам впишу...
-        // это то же самое что на форме в методе Render
         foreach (var particle in particles)
         {
             particle.Draw(g);
         }
-        // рисую точки притяжения красными кружочками
+        
         foreach (var point in impactPoints)
         {
            point.Render(g);
         }
     }
 
-    // добавил новый метод, виртуальным, чтобы переопределять можно было
-    public virtual void ResetParticle(Particle particle)
+    protected virtual void ResetParticle(Particle particle)
     {
-        //particle.Life = 20 + Particle.Rand.Next(100);
         particle.Life = Particle.Rand.Next(LifeMin, LifeMax);
-        //particle.X = MousePositionX;
-        //particle.Y = MousePositionY;
         particle.X = X;
         particle.Y = Y;
 
         var direction = Direction
-                        + (double)Particle.Rand.Next(Spreading)
+                        + (double)Particle.Rand.Next((int)Spreading)
                         - Spreading / 2;
 
         var speed = Particle.Rand.Next(SpeedMin, SpeedMax);
@@ -113,8 +141,7 @@ public class ParticleEmitter
         particle.Radius = Particle.Rand.Next(RadiusMin, RadiusMax);
     }
 
-    /* добавил метод */
-    public virtual Particle CreateParticle()
+    protected virtual Particle CreateParticle()
     {
         var particle = new ParticleColorful
         {
@@ -124,6 +151,5 @@ public class ParticleEmitter
 
         return particle;
     }
-
 }
 

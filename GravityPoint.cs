@@ -1,32 +1,38 @@
 ﻿namespace ParticleSystem;
 
+/**
+ * Точка притяжения
+ */
 public class GravityPoint : IImpactPoint
 {
-    public int Power = 100; // сила притяжения
+    /** Cила притяжения */
+    public float Power = 100;
+    
 
     public override void ImpactParticle(Particle particle)
     {
+        // расстояние от центра точки до центра частицы
         float gX = X - particle.X;
         float gY = Y - particle.Y;
-        double r = Math.Sqrt(gX * gX + gY * gY); // расстояние от центра точки до центра частицы
+        double r =  Math.Sqrt(gX * gX + gY * gY);
+        
+        // не интересует, если частица не внутри точки
+        if (!(r + particle.Radius < Power / 2)) return; 
 
-        if (r + particle.Radius < Power / 2) // если частица внутри окружности
-        {
-            // то притягиваем ее
-            float r2 = (float)Math.Max(100, gX * gX + gY * gY);
-            particle.SpeedX += gX * Power / r2;
-            particle.SpeedY += gY * Power / r2;
-        }
+        // если частица внутри окружности, то притягиваем ее
+        float r2 = (float)Math.Max(100, gX * gX + gY * gY);
+        particle.SpeedX += gX * Power / r2;
+        particle.SpeedY += gY * Power / r2;
     }
 
     public override void Render(Graphics g)
     {
         g.DrawEllipse(
-            new Pen(Color.Red),
-            X - Power / 2,
-            Y - Power / 2,
-            Power,
-            Power
+            new Pen(Color),
+            x: X - Power / 2,
+            y: Y - Power / 2,
+            width: Power,
+            height: Power
         );
 
         var stringFormat = new StringFormat();

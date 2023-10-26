@@ -4,7 +4,7 @@ public class TopEmitter : ParticleEmitter
 {
     public int Width; // длина экрана
 
-    public override void ResetParticle(Particle particle)
+    protected override void ResetParticle(Particle particle)
     {
         base.ResetParticle(particle);
 

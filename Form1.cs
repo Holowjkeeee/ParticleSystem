@@ -7,7 +7,7 @@ public partial class Form1 : Form
         InitializeComponent();
         picDisplay.Image = new Bitmap(picDisplay.Width, picDisplay.Height);
 
-        this.emitter = new ParticleEmitter()
+        emitter = new ParticleEmitter()
         {
             Direction = 0,
             Spreading = 10,
@@ -20,7 +20,7 @@ public partial class Form1 : Form
             Y = picDisplay.Height / 2,
         };
 
-        emitters.Add(this.emitter);
+        emitters.Add(emitter);
 
         point1 = new GravityPoint
         {
@@ -74,20 +74,20 @@ public partial class Form1 : Form
             emitter.Render(g);
         }
 
-        picDisplay.Invalidate(); // обновить picDisplay
+        picDisplay.Invalidate(); // РѕР±РЅРѕРІРёС‚СЊ picDisplay
     }
 
-    public void ClearScreen(Graphics g, Color color)
+    private void ClearScreen(Graphics g, Color color)
     {
         g.Clear(color);
     }
 
     private void picDisplay_MouseMove(object sender, MouseEventArgs e)
     {
-        foreach (var emitter in emitters)
+        foreach (var _emitter in emitters)
         {
-            emitter.MousePositionX = e.X;
-            emitter.MousePositionY = e.Y;
+            _emitter.X = e.X;
+            _emitter.Y = e.Y;
         }
 
         point2.X = e.X;
@@ -98,7 +98,7 @@ public partial class Form1 : Form
     private void tbDirection_Scroll(object sender, EventArgs e)
     {
         emitter.Direction = tbDirection.Value;
-        lblDirection.Text = $"{tbDirection.Value}°"; // добавил вывод значения
+        lblDirection.Text = $"{tbDirection.Value}В°";
     }
 
     private void tbGraviton_Scroll(object sender, EventArgs e)
