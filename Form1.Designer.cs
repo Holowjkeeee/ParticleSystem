@@ -39,6 +39,7 @@
             DebugNextStep_Button = new Button();
             DebugMode_CheckBox = new CheckBox();
             Debug_Group = new GroupBox();
+            CurrentFPS_Label = new Label();
             ShowSpeedVectors_CheckBox = new CheckBox();
             label4 = new Label();
             DebugMaxFPS_TextBox = new TextBox();
@@ -47,7 +48,6 @@
             label1 = new Label();
             DebugPreviousStep_Button = new Button();
             DebugSpeed_TrackBar = new TrackBar();
-            CurrentFPS_Label = new Label();
             ((System.ComponentModel.ISupportInitialize)picDisplay).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tbDirection).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tbGraviton1).BeginInit();
@@ -120,6 +120,7 @@
             DebugNextStep_Button.Text = "Next step";
             DebugNextStep_Button.UseVisualStyleBackColor = true;
             DebugNextStep_Button.Visible = false;
+            DebugNextStep_Button.Click += DebugNextStep_Button_Click;
             // 
             // DebugMode_CheckBox
             // 
@@ -151,6 +152,14 @@
             Debug_Group.TabStop = false;
             Debug_Group.Text = "Debug";
             Debug_Group.Visible = false;
+            // 
+            // CurrentFPS_Label
+            // 
+            CurrentFPS_Label.AutoSize = true;
+            CurrentFPS_Label.Location = new Point(223, 70);
+            CurrentFPS_Label.Name = "CurrentFPS_Label";
+            CurrentFPS_Label.Size = new Size(0, 15);
+            CurrentFPS_Label.TabIndex = 15;
             // 
             // ShowSpeedVectors_CheckBox
             // 
@@ -230,14 +239,6 @@
             DebugSpeed_TrackBar.TickStyle = TickStyle.None;
             DebugSpeed_TrackBar.Value = 100;
             DebugSpeed_TrackBar.Scroll += DebugSpeed_TrackBar_Scroll;
-            // 
-            // CurrentFPS_Label
-            // 
-            CurrentFPS_Label.AutoSize = true;
-            CurrentFPS_Label.Location = new Point(223, 70);
-            CurrentFPS_Label.Name = "CurrentFPS_Label";
-            CurrentFPS_Label.Size = new Size(0, 15);
-            CurrentFPS_Label.TabIndex = 15;
             // 
             // Form1
             // 

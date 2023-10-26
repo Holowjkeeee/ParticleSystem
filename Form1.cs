@@ -142,7 +142,7 @@ public partial class Form1 : Form
                 CurrentFPS_Label.Text = currentFPS.ToString();
                 timer1.Enabled = true;
             }
-            catch(DivideByZeroException ) { }
+            catch (DivideByZeroException) { }
         }
         else
         {
@@ -163,5 +163,10 @@ public partial class Form1 : Form
     {
         picDisplay.Width = Form1.ActiveForm.Size.Width;
         picDisplay.Image = new Bitmap(Form1.ActiveForm.Size.Width, picDisplay.Height);
+    }
+
+    private void DebugNextStep_Button_Click(object sender, EventArgs e)
+    {
+        timer1_Tick(this, EventArgs.Empty);
     }
 }
