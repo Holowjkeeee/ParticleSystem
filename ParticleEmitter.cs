@@ -50,10 +50,7 @@ public class ParticleEmitter
     
     /** Сила гравитации по Y */
     public float GravitationY = 0;
-    
-    /** Общее количество частиц */
-    public int ParticlesCount = 500;
-    
+
     /** Точки притяжения */
     public List<IImpactPoint> impactPoints = new();
     
@@ -70,10 +67,10 @@ public class ParticleEmitter
     public bool IsSpeedVectorVisible = false;
 
     /** Память прошлых состояний */
-    private List<List<Particle>> StatesStorage = new();
+    public List<List<Particle>> StatesStorage = new();
 
     /** Размер памяти состояний */
-    public int StorageSize = 10;
+    public int StorageSize = 30;
 
     public int CurrentRestoredState;
 
@@ -85,7 +82,6 @@ public class ParticleEmitter
 
         foreach (var particle in particles)
         {
-            
             if (particle.Life == 0) // если частицы умерла
             {
                 // то проверяем надо ли создать частицу
@@ -104,7 +100,6 @@ public class ParticleEmitter
 
             
             particle.IsSpeedVectorVisible = IsSpeedVectorVisible;
-            Console.WriteLine("shtsht");
 
             // каждая точка по-своему воздействует на вектор скорости
             foreach (var point in impactPoints)
@@ -118,8 +113,6 @@ public class ParticleEmitter
             
         }
 
-        // цикл будет срабатывать только в самом начале работы эмиттера
-        // пока не накопится критическая масса частиц - ParticlesCount
         while (particlesToCreate >= 1)
         {
             particlesToCreate -= 1;
@@ -179,14 +172,24 @@ public class ParticleEmitter
         {
             StatesStorage.RemoveAt(0);
         }
-        StatesStorage.Add(particles);
+        List<Particle> currentState = particles.Select(particle => particle.ShallowCopy()).ToList();
+        StatesStorage.Add(currentState);
     }
 
     public void RestorePreviousState()
     {
         if (CurrentRestoredState == 0) { return; }
         CurrentRestoredState--;
-        particles = StatesStorage[CurrentRestoredState];
+        try
+        {
+            this.particles = StatesStorage[CurrentRestoredState];
+        }
+        catch (ArgumentOutOfRangeException e)
+        {
+            CurrentRestoredState = StatesStorage.Count - 2;
+            this.particles = StatesStorage[CurrentRestoredState];
+        }
+        
     }
 
     public void RestoreNextState()
@@ -196,4 +199,3 @@ public class ParticleEmitter
         particles = StatesStorage[CurrentRestoredState];
     }
 }
-

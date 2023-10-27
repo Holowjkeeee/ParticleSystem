@@ -48,18 +48,22 @@
             label1 = new Label();
             DebugPreviousStep_Button = new Button();
             DebugSpeed_TrackBar = new TrackBar();
+            numericUpDown1 = new NumericUpDown();
+            textBox1 = new TextBox();
+            toolTip1 = new ToolTip(components);
             ((System.ComponentModel.ISupportInitialize)picDisplay).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tbDirection).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tbGraviton1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)tbGraviton2).BeginInit();
             Debug_Group.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)DebugSpeed_TrackBar).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SuspendLayout();
             // 
             // timer1
             // 
             timer1.Enabled = true;
-            timer1.Interval = 40;
+            timer1.Interval = 17;
             timer1.Tick += timer1_Tick;
             // 
             // picDisplay
@@ -79,6 +83,7 @@
             tbDirection.Size = new Size(237, 45);
             tbDirection.TabIndex = 1;
             tbDirection.TickStyle = TickStyle.None;
+            tbDirection.Visible = false;
             tbDirection.Scroll += tbDirection_Scroll;
             // 
             // lblDirection
@@ -89,6 +94,7 @@
             lblDirection.Size = new Size(13, 15);
             lblDirection.TabIndex = 2;
             lblDirection.Text = "0";
+            lblDirection.Visible = false;
             // 
             // tbGraviton1
             // 
@@ -98,6 +104,7 @@
             tbGraviton1.Size = new Size(173, 45);
             tbGraviton1.TabIndex = 3;
             tbGraviton1.TickStyle = TickStyle.None;
+            tbGraviton1.Visible = false;
             tbGraviton1.Scroll += tbGraviton_Scroll;
             // 
             // tbGraviton2
@@ -108,6 +115,7 @@
             tbGraviton2.Size = new Size(128, 45);
             tbGraviton2.TabIndex = 4;
             tbGraviton2.TickStyle = TickStyle.None;
+            tbGraviton2.Visible = false;
             tbGraviton2.Scroll += tbGraviton2_Scroll;
             // 
             // DebugNextStep_Button
@@ -156,10 +164,11 @@
             // CurrentFPS_Label
             // 
             CurrentFPS_Label.AutoSize = true;
-            CurrentFPS_Label.Location = new Point(223, 70);
+            CurrentFPS_Label.Location = new Point(148, 70);
             CurrentFPS_Label.Name = "CurrentFPS_Label";
-            CurrentFPS_Label.Size = new Size(0, 15);
+            CurrentFPS_Label.Size = new Size(69, 15);
             CurrentFPS_Label.TabIndex = 15;
+            CurrentFPS_Label.Text = "Current FPS";
             // 
             // ShowSpeedVectors_CheckBox
             // 
@@ -241,11 +250,34 @@
             DebugSpeed_TrackBar.Value = 100;
             DebugSpeed_TrackBar.Scroll += DebugSpeed_TrackBar_Scroll;
             // 
+            // numericUpDown1
+            // 
+            numericUpDown1.Location = new Point(341, 514);
+            numericUpDown1.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
+            numericUpDown1.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
+            numericUpDown1.Name = "numericUpDown1";
+            numericUpDown1.Size = new Size(47, 23);
+            numericUpDown1.TabIndex = 8;
+            numericUpDown1.TextAlign = HorizontalAlignment.Center;
+            numericUpDown1.Value = new decimal(new int[] { 60, 0, 0, 0 });
+            // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(341, 555);
+            textBox1.Name = "textBox1";
+            textBox1.ReadOnly = true;
+            textBox1.Size = new Size(47, 23);
+            textBox1.TabIndex = 16;
+            textBox1.Text = "60";
+            textBox1.TextAlign = HorizontalAlignment.Center;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1034, 711);
+            Controls.Add(textBox1);
+            Controls.Add(numericUpDown1);
             Controls.Add(Debug_Group);
             Controls.Add(DebugMode_CheckBox);
             Controls.Add(tbGraviton2);
@@ -253,6 +285,7 @@
             Controls.Add(lblDirection);
             Controls.Add(tbDirection);
             Controls.Add(picDisplay);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
             Text = "Particle system";
@@ -264,6 +297,7 @@
             Debug_Group.ResumeLayout(false);
             Debug_Group.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)DebugSpeed_TrackBar).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -288,5 +322,8 @@
         private Label label4;
         private TextBox DebugMaxFPS_TextBox;
         private Label CurrentFPS_Label;
+        private NumericUpDown numericUpDown1;
+        private TextBox textBox1;
+        private ToolTip toolTip1;
     }
 }

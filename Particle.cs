@@ -1,4 +1,6 @@
-﻿namespace ParticleSystem;
+﻿using System;
+
+namespace ParticleSystem;
 
 /**
  * Класс частицы
@@ -68,6 +70,11 @@ public class Particle
         
         Radius = GetRandomFloat(2f, 10f);
         Life = Rand.Next(20, 120); // Исходный запас здоровья от 20 до 120
+    }
+
+    public Particle ShallowCopy()
+    {
+        return (Particle)this.MemberwiseClone();
     }
 
     public void DrawSpeedVector(Graphics g, int alpha)

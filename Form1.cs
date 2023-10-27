@@ -14,13 +14,14 @@ public partial class Form1 : Form
         emitter = new ParticleEmitter()
         {
             Direction = 2,
-            Spreading = 120,
+            Spreading = 170,
+            LifeMax = 100,
+            LifeMin = 100,
             SpeedMin = 5,
             SpeedMax = 12,
             ColorFrom = Color.Gold,
             ColorTo = Color.FromArgb(0, Color.Red),
-            ParticlesPerTick = 10,
-            X = picDisplay.Width / 2,
+            X = picDisplay.Width / 3,
             Y = picDisplay.Height / 2,
         };
 
@@ -162,12 +163,14 @@ public partial class Form1 : Form
 
     private void DebugNextStep_Button_Click(object sender, EventArgs e)
     {
-        if (emitter.CurrentRestoredState < emitter.StorageSize)
+        if (emitter.CurrentRestoredState < emitter.StorageSize && emitter.CurrentRestoredState < emitter.StatesStorage.Count)
         {
             emitter.RestoreNextState();
-            DebugPreviousStep_Button.Text = Regex.Replace(DebugPreviousStep_Button.Text, @"\(\d+\)", $"(${emitter.CurrentRestoredState})");
+            UpdatePreviousStateButton();
             using var g = Graphics.FromImage(picDisplay.Image);
+            ClearScreen(g, BackgroundColor);
             emitter.Render(g);
+            picDisplay.Invalidate(); // обновить picDisplay
         }
         else
         {
@@ -175,17 +178,20 @@ public partial class Form1 : Form
         }
     }
 
+    private void UpdatePreviousStateButton()
+    {
+        DebugPreviousStep_Button.Text = Regex.Replace(DebugPreviousStep_Button.Text, @"\d+", emitter.CurrentRestoredState.ToString());
+        DebugPreviousStep_Button.Enabled = emitter.CurrentRestoredState != 0;
+    }
+
     private void DebugPreviousStep_Button_Click(object sender, EventArgs e)
     {
-        if (emitter.CurrentRestoredState == 0)
-        {
-            DebugPreviousStep_Button.Enabled = false;
-            return;
-        }
-
         emitter.RestorePreviousState();
+        UpdatePreviousStateButton();
+
         using var g = Graphics.FromImage(picDisplay.Image);
+        ClearScreen(g, BackgroundColor);
         emitter.Render(g);
-        DebugPreviousStep_Button.Text = Regex.Replace(DebugPreviousStep_Button.Text, @"\(\d+\)", $"(${emitter.CurrentRestoredState})");
+        picDisplay.Invalidate(); // обновить picDisplay
     }
 }
