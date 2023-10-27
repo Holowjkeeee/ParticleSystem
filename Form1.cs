@@ -1,14 +1,10 @@
-using System.Diagnostics.Metrics;
-using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace ParticleSystem;
 
 public partial class Form1 : Form
 {
-
-
     public Color BackgroundColor = Color.Black;
-    public int Interval = 40;
 
     public Form1()
     {
@@ -72,6 +68,7 @@ public partial class Form1 : Form
     private void timer1_Tick(object sender, EventArgs e)
     {
         emitter.UpdateState();
+        emitter.SaveState();
 
         using var g = Graphics.FromImage(picDisplay.Image);
         ClearScreen(g, BackgroundColor);
@@ -91,6 +88,7 @@ public partial class Form1 : Form
 
     private void picDisplay_MouseMove(object sender, MouseEventArgs e)
     {
+        //if ()
         //foreach (var _emitter in emitters)
         //{
         //    _emitter.X = e.X;
@@ -127,9 +125,6 @@ public partial class Form1 : Form
 
     private void DebugSpeed_TrackBar_Scroll(object sender, EventArgs e)
     {
-        // min - 
-        // max - 
-        // convert fps to interval
         DebugNextStep_Button.Visible = DebugSpeed_TrackBar.Value == 0;
         DebugPreviousStep_Button.Visible = DebugSpeed_TrackBar.Value == 0;
         if (DebugSpeed_TrackBar.Value != 0)
@@ -161,12 +156,36 @@ public partial class Form1 : Form
 
     private void Form1_SizeChanged(object sender, EventArgs e)
     {
-        picDisplay.Width = Form1.ActiveForm.Size.Width;
-        picDisplay.Image = new Bitmap(Form1.ActiveForm.Size.Width, picDisplay.Height);
+        picDisplay.Width = ActiveForm!.Size.Width;
+        picDisplay.Image = new Bitmap(ActiveForm.Size.Width, picDisplay.Height);
     }
 
     private void DebugNextStep_Button_Click(object sender, EventArgs e)
     {
-        timer1_Tick(this, EventArgs.Empty);
+        if (emitter.CurrentRestoredState < emitter.StorageSize)
+        {
+            emitter.RestoreNextState();
+            DebugPreviousStep_Button.Text = Regex.Replace(DebugPreviousStep_Button.Text, @"\(\d+\)", $"(${emitter.CurrentRestoredState})");
+            using var g = Graphics.FromImage(picDisplay.Image);
+            emitter.Render(g);
+        }
+        else
+        {
+            timer1_Tick(this, EventArgs.Empty);
+        }
+    }
+
+    private void DebugPreviousStep_Button_Click(object sender, EventArgs e)
+    {
+        if (emitter.CurrentRestoredState == 0)
+        {
+            DebugPreviousStep_Button.Enabled = false;
+            return;
+        }
+
+        emitter.RestorePreviousState();
+        using var g = Graphics.FromImage(picDisplay.Image);
+        emitter.Render(g);
+        DebugPreviousStep_Button.Text = Regex.Replace(DebugPreviousStep_Button.Text, @"\(\d+\)", $"(${emitter.CurrentRestoredState})");
     }
 }

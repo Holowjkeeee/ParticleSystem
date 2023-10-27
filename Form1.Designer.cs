@@ -226,6 +226,7 @@
             DebugPreviousStep_Button.Text = "Previous Step (10)";
             DebugPreviousStep_Button.UseVisualStyleBackColor = true;
             DebugPreviousStep_Button.Visible = false;
+            DebugPreviousStep_Button.Click += DebugPreviousStep_Button_Click;
             // 
             // DebugSpeed_TrackBar
             // 

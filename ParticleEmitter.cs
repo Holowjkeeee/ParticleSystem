@@ -6,6 +6,11 @@
 public class ParticleEmitter
 {
 
+    public ParticleEmitter()
+    {
+        CurrentRestoredState = StorageSize;
+    }
+
     #region Properties & Fields
     /** Координата X центра эмиттера */
     public int X;
@@ -63,6 +68,14 @@ public class ParticleEmitter
 
     /** Видимость вектора скорости */
     public bool IsSpeedVectorVisible = false;
+
+    /** Память прошлых состояний */
+    private List<List<Particle>> StatesStorage = new();
+
+    /** Размер памяти состояний */
+    public int StorageSize = 10;
+
+    public int CurrentRestoredState;
 
     #endregion
 
@@ -158,6 +171,29 @@ public class ParticleEmitter
         };
 
         return particle;
+    }
+
+    public void SaveState()
+    {
+        if (StatesStorage.Count == StorageSize)
+        {
+            StatesStorage.RemoveAt(0);
+        }
+        StatesStorage.Add(particles);
+    }
+
+    public void RestorePreviousState()
+    {
+        if (CurrentRestoredState == 0) { return; }
+        CurrentRestoredState--;
+        particles = StatesStorage[CurrentRestoredState];
+    }
+
+    public void RestoreNextState()
+    {
+        if (CurrentRestoredState == StorageSize-1) { return; }
+        CurrentRestoredState++;
+        particles = StatesStorage[CurrentRestoredState];
     }
 }
 
