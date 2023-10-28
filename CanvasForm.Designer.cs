@@ -1,6 +1,6 @@
 ﻿namespace ParticleSystem
 {
-    partial class Form1
+    partial class CanvasForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -29,35 +29,31 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CanvasForm));
             timer1 = new System.Windows.Forms.Timer(components);
             picDisplay = new PictureBox();
-            tbDirection = new TrackBar();
-            lblDirection = new Label();
-            tbGraviton1 = new TrackBar();
-            tbGraviton2 = new TrackBar();
             DebugNextStep_Button = new Button();
             DebugMode_CheckBox = new CheckBox();
             Debug_Group = new GroupBox();
+            DebugMaxFPS_NumericUpDown = new NumericUpDown();
+            CurrentFPS_TextBox = new TextBox();
             CurrentFPS_Label = new Label();
             ShowSpeedVectors_CheckBox = new CheckBox();
             label4 = new Label();
-            DebugMaxFPS_TextBox = new TextBox();
             label3 = new Label();
             label2 = new Label();
             label1 = new Label();
             DebugPreviousStep_Button = new Button();
             DebugSpeed_TrackBar = new TrackBar();
-            numericUpDown1 = new NumericUpDown();
-            textBox1 = new TextBox();
-            toolTip1 = new ToolTip(components);
+            DebugTooltip = new ToolTip(components);
+            DebugInfo_Label = new Label();
+            menuStrip1 = new MenuStrip();
+            debugToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)picDisplay).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)tbDirection).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)tbGraviton1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)tbGraviton2).BeginInit();
             Debug_Group.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)DebugMaxFPS_NumericUpDown).BeginInit();
             ((System.ComponentModel.ISupportInitialize)DebugSpeed_TrackBar).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // timer1
@@ -68,55 +64,13 @@
             // 
             // picDisplay
             // 
-            picDisplay.Location = new Point(0, 0);
+            picDisplay.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            picDisplay.Location = new Point(0, 27);
             picDisplay.Name = "picDisplay";
-            picDisplay.Size = new Size(1034, 342);
+            picDisplay.Size = new Size(1034, 464);
             picDisplay.TabIndex = 0;
             picDisplay.TabStop = false;
             picDisplay.MouseMove += picDisplay_MouseMove;
-            // 
-            // tbDirection
-            // 
-            tbDirection.Location = new Point(37, 417);
-            tbDirection.Maximum = 359;
-            tbDirection.Name = "tbDirection";
-            tbDirection.Size = new Size(237, 45);
-            tbDirection.TabIndex = 1;
-            tbDirection.TickStyle = TickStyle.None;
-            tbDirection.Visible = false;
-            tbDirection.Scroll += tbDirection_Scroll;
-            // 
-            // lblDirection
-            // 
-            lblDirection.AutoSize = true;
-            lblDirection.Location = new Point(272, 417);
-            lblDirection.Name = "lblDirection";
-            lblDirection.Size = new Size(13, 15);
-            lblDirection.TabIndex = 2;
-            lblDirection.Text = "0";
-            lblDirection.Visible = false;
-            // 
-            // tbGraviton1
-            // 
-            tbGraviton1.Location = new Point(329, 417);
-            tbGraviton1.Maximum = 100;
-            tbGraviton1.Name = "tbGraviton1";
-            tbGraviton1.Size = new Size(173, 45);
-            tbGraviton1.TabIndex = 3;
-            tbGraviton1.TickStyle = TickStyle.None;
-            tbGraviton1.Visible = false;
-            tbGraviton1.Scroll += tbGraviton_Scroll;
-            // 
-            // tbGraviton2
-            // 
-            tbGraviton2.Location = new Point(549, 417);
-            tbGraviton2.Maximum = 100;
-            tbGraviton2.Name = "tbGraviton2";
-            tbGraviton2.Size = new Size(128, 45);
-            tbGraviton2.TabIndex = 4;
-            tbGraviton2.TickStyle = TickStyle.None;
-            tbGraviton2.Visible = false;
-            tbGraviton2.Scroll += tbGraviton2_Scroll;
             // 
             // DebugNextStep_Button
             // 
@@ -133,7 +87,7 @@
             // DebugMode_CheckBox
             // 
             DebugMode_CheckBox.AutoSize = true;
-            DebugMode_CheckBox.Location = new Point(35, 468);
+            DebugMode_CheckBox.Location = new Point(12, 497);
             DebugMode_CheckBox.Name = "DebugMode_CheckBox";
             DebugMode_CheckBox.Size = new Size(95, 19);
             DebugMode_CheckBox.TabIndex = 6;
@@ -143,23 +97,46 @@
             // 
             // Debug_Group
             // 
+            Debug_Group.Controls.Add(DebugMaxFPS_NumericUpDown);
+            Debug_Group.Controls.Add(CurrentFPS_TextBox);
             Debug_Group.Controls.Add(CurrentFPS_Label);
             Debug_Group.Controls.Add(ShowSpeedVectors_CheckBox);
             Debug_Group.Controls.Add(label4);
-            Debug_Group.Controls.Add(DebugMaxFPS_TextBox);
             Debug_Group.Controls.Add(label3);
             Debug_Group.Controls.Add(label2);
             Debug_Group.Controls.Add(label1);
             Debug_Group.Controls.Add(DebugPreviousStep_Button);
             Debug_Group.Controls.Add(DebugSpeed_TrackBar);
             Debug_Group.Controls.Add(DebugNextStep_Button);
-            Debug_Group.Location = new Point(37, 493);
+            Debug_Group.Location = new Point(12, 522);
             Debug_Group.Name = "Debug_Group";
             Debug_Group.Size = new Size(289, 185);
             Debug_Group.TabIndex = 7;
             Debug_Group.TabStop = false;
             Debug_Group.Text = "Debug";
             Debug_Group.Visible = false;
+            // 
+            // DebugMaxFPS_NumericUpDown
+            // 
+            DebugMaxFPS_NumericUpDown.Location = new Point(223, 24);
+            DebugMaxFPS_NumericUpDown.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
+            DebugMaxFPS_NumericUpDown.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
+            DebugMaxFPS_NumericUpDown.Name = "DebugMaxFPS_NumericUpDown";
+            DebugMaxFPS_NumericUpDown.Size = new Size(47, 23);
+            DebugMaxFPS_NumericUpDown.TabIndex = 8;
+            DebugMaxFPS_NumericUpDown.TextAlign = HorizontalAlignment.Center;
+            DebugMaxFPS_NumericUpDown.Value = new decimal(new int[] { 60, 0, 0, 0 });
+            DebugMaxFPS_NumericUpDown.ValueChanged += DebugMaxFPS_NumericUpDown_ValueChanged;
+            // 
+            // CurrentFPS_TextBox
+            // 
+            CurrentFPS_TextBox.Location = new Point(223, 67);
+            CurrentFPS_TextBox.Name = "CurrentFPS_TextBox";
+            CurrentFPS_TextBox.ReadOnly = true;
+            CurrentFPS_TextBox.Size = new Size(47, 23);
+            CurrentFPS_TextBox.TabIndex = 16;
+            CurrentFPS_TextBox.Text = "60";
+            CurrentFPS_TextBox.TextAlign = HorizontalAlignment.Center;
             // 
             // CurrentFPS_Label
             // 
@@ -173,7 +150,7 @@
             // ShowSpeedVectors_CheckBox
             // 
             ShowSpeedVectors_CheckBox.AutoSize = true;
-            ShowSpeedVectors_CheckBox.Location = new Point(6, 22);
+            ShowSpeedVectors_CheckBox.Location = new Point(6, 25);
             ShowSpeedVectors_CheckBox.Name = "ShowSpeedVectors_CheckBox";
             ShowSpeedVectors_CheckBox.Size = new Size(130, 19);
             ShowSpeedVectors_CheckBox.TabIndex = 14;
@@ -184,19 +161,11 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(165, 26);
+            label4.Location = new Point(165, 27);
             label4.Name = "label4";
             label4.Size = new Size(52, 15);
             label4.TabIndex = 13;
             label4.Text = "Max FPS";
-            // 
-            // DebugMaxFPS_TextBox
-            // 
-            DebugMaxFPS_TextBox.Location = new Point(223, 22);
-            DebugMaxFPS_TextBox.Name = "DebugMaxFPS_TextBox";
-            DebugMaxFPS_TextBox.Size = new Size(52, 23);
-            DebugMaxFPS_TextBox.TabIndex = 12;
-            DebugMaxFPS_TextBox.Text = "60";
             // 
             // label3
             // 
@@ -250,54 +219,53 @@
             DebugSpeed_TrackBar.Value = 100;
             DebugSpeed_TrackBar.Scroll += DebugSpeed_TrackBar_Scroll;
             // 
-            // numericUpDown1
+            // DebugInfo_Label
             // 
-            numericUpDown1.Location = new Point(341, 514);
-            numericUpDown1.Maximum = new decimal(new int[] { 60, 0, 0, 0 });
-            numericUpDown1.Minimum = new decimal(new int[] { 10, 0, 0, 0 });
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(47, 23);
-            numericUpDown1.TabIndex = 8;
-            numericUpDown1.TextAlign = HorizontalAlignment.Center;
-            numericUpDown1.Value = new decimal(new int[] { 60, 0, 0, 0 });
+            DebugInfo_Label.AutoSize = true;
+            DebugInfo_Label.Location = new Point(325, 532);
+            DebugInfo_Label.Name = "DebugInfo_Label";
+            DebugInfo_Label.Size = new Size(38, 15);
+            DebugInfo_Label.TabIndex = 8;
+            DebugInfo_Label.Text = "label5";
             // 
-            // textBox1
+            // menuStrip1
             // 
-            textBox1.Location = new Point(341, 555);
-            textBox1.Name = "textBox1";
-            textBox1.ReadOnly = true;
-            textBox1.Size = new Size(47, 23);
-            textBox1.TabIndex = 16;
-            textBox1.Text = "60";
-            textBox1.TextAlign = HorizontalAlignment.Center;
+            menuStrip1.Items.AddRange(new ToolStripItem[] { debugToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(1034, 24);
+            menuStrip1.TabIndex = 9;
+            menuStrip1.Text = "menuStrip1";
             // 
-            // Form1
+            // debugToolStripMenuItem
+            // 
+            debugToolStripMenuItem.Name = "debugToolStripMenuItem";
+            debugToolStripMenuItem.Size = new Size(54, 20);
+            debugToolStripMenuItem.Text = "Debug";
+            // 
+            // CanvasForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1034, 711);
-            Controls.Add(textBox1);
-            Controls.Add(numericUpDown1);
+            Controls.Add(DebugInfo_Label);
             Controls.Add(Debug_Group);
             Controls.Add(DebugMode_CheckBox);
-            Controls.Add(tbGraviton2);
-            Controls.Add(tbGraviton1);
-            Controls.Add(lblDirection);
-            Controls.Add(tbDirection);
             Controls.Add(picDisplay);
+            Controls.Add(menuStrip1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Icon = (Icon)resources.GetObject("$this.Icon");
-            Name = "Form1";
+            MainMenuStrip = menuStrip1;
+            Name = "CanvasForm";
             Text = "Particle system";
             SizeChanged += Form1_SizeChanged;
             ((System.ComponentModel.ISupportInitialize)picDisplay).EndInit();
-            ((System.ComponentModel.ISupportInitialize)tbDirection).EndInit();
-            ((System.ComponentModel.ISupportInitialize)tbGraviton1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)tbGraviton2).EndInit();
             Debug_Group.ResumeLayout(false);
             Debug_Group.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)DebugMaxFPS_NumericUpDown).EndInit();
             ((System.ComponentModel.ISupportInitialize)DebugSpeed_TrackBar).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -306,10 +274,6 @@
 
         private System.Windows.Forms.Timer timer1;
         private PictureBox picDisplay;
-        private TrackBar tbDirection;
-        private Label lblDirection;
-        private TrackBar tbGraviton1;
-        private TrackBar tbGraviton2;
         private Button DebugNextStep_Button;
         private CheckBox DebugMode_CheckBox;
         private GroupBox Debug_Group;
@@ -320,10 +284,12 @@
         private Label label3;
         private CheckBox ShowSpeedVectors_CheckBox;
         private Label label4;
-        private TextBox DebugMaxFPS_TextBox;
         private Label CurrentFPS_Label;
-        private NumericUpDown numericUpDown1;
-        private TextBox textBox1;
-        private ToolTip toolTip1;
+        private NumericUpDown DebugMaxFPS_NumericUpDown;
+        private TextBox CurrentFPS_TextBox;
+        private ToolTip DebugTooltip;
+        private Label DebugInfo_Label;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem debugToolStripMenuItem;
     }
 }

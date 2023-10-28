@@ -40,6 +40,7 @@ public class Particle
     /** Видимость вектора скорости */
     public bool IsSpeedVectorVisible = false;
 
+    public bool ShowDebugInfo = true;
 
     private float GetRandomFloat(float min, float max)
     {
@@ -108,8 +109,39 @@ public class Particle
         );
 
         DrawSpeedVector(g, alpha);
+        if (ShowDebugInfo) DrawDebugInfo(g);
     }
 
-    
+    public void DrawDebugInfo(Graphics g)
+    {
+        var stringFormat = new StringFormat();
+        stringFormat.Alignment = StringAlignment.Center;
+        stringFormat.LineAlignment = StringAlignment.Center;
+
+        var text = $"X:{X}\nY:{Y}\nSpeedX:{SpeedX}\nSpeedY:{SpeedY}\nDirection:{Direction}\nLife:{Life}";
+        var font = new Font("Verdana", 10);
+
+        // померить размеры текста
+        var size = g.MeasureString(text, font);
+
+        // подложнка под текст
+        g.FillRectangle(
+            new SolidBrush(Color.Red),
+            X - (float)size.Width / 2,
+            Y - (float)size.Height / 2,
+            size.Width,
+            size.Height
+        );
+
+        // текст
+        g.DrawString(
+            text,
+            font,
+            new SolidBrush(Color.White),
+            X,
+            Y,
+            stringFormat
+        );
+    }
 }
 

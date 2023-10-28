@@ -8,7 +8,7 @@ public class ParticleEmitter
 
     public ParticleEmitter()
     {
-        CurrentRestoredState = StorageSize;
+        CurrentStateIndex = StorageSize-1;
     }
 
     #region Properties & Fields
@@ -69,10 +69,11 @@ public class ParticleEmitter
     /** Память прошлых состояний */
     public List<List<Particle>> StatesStorage = new();
 
-    /** Размер памяти состояний */
-    public int StorageSize = 30;
+    /** Размер памяти состояний, включая текущее состояние */
+    public int StorageSize = 105;
 
-    public int CurrentRestoredState;
+    public int CurrentStateIndex;
+    
 
     #endregion
 
@@ -162,6 +163,7 @@ public class ParticleEmitter
             ToColor = ColorTo,
             IsSpeedVectorVisible = IsSpeedVectorVisible
         };
+        
 
         return particle;
     }
@@ -178,24 +180,26 @@ public class ParticleEmitter
 
     public void RestorePreviousState()
     {
-        if (CurrentRestoredState == 0) { return; }
-        CurrentRestoredState--;
+        if (CurrentStateIndex == 0) { return; }
         try
         {
-            this.particles = StatesStorage[CurrentRestoredState];
+            CurrentStateIndex -= 1;
+            particles = StatesStorage[CurrentStateIndex];
         }
         catch (ArgumentOutOfRangeException e)
         {
-            CurrentRestoredState = StatesStorage.Count - 2;
-            this.particles = StatesStorage[CurrentRestoredState];
+            CurrentStateIndex = StatesStorage.Count-1;
+            CurrentStateIndex -= 1;
+            particles = StatesStorage[CurrentStateIndex];
         }
         
     }
 
     public void RestoreNextState()
     {
-        if (CurrentRestoredState == StorageSize-1) { return; }
-        CurrentRestoredState++;
-        particles = StatesStorage[CurrentRestoredState];
+        if (CurrentStateIndex == StorageSize-1) { return; }
+        if (CurrentStateIndex == StatesStorage.Count-1) { return; }
+        CurrentStateIndex += 1;
+        particles = StatesStorage[CurrentStateIndex];
     }
 }

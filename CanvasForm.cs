@@ -2,15 +2,32 @@ using System.Text.RegularExpressions;
 
 namespace ParticleSystem;
 
-public partial class Form1 : Form
+record Defaults
+{
+    public static int CurrentFPS = 60;
+    public static int MaxFPS = 60;
+    public const int ONE_SECOND = 1000;
+    public static bool ShowSpeedVectors = false;
+}
+
+public partial class CanvasForm : Form
 {
     public Color BackgroundColor = Color.Black;
+    public int CurrentFPS = Defaults.CurrentFPS;
+    public int MaxFPS = Defaults.MaxFPS;
+    public bool ShowVectorSpeed = Defaults.ShowSpeedVectors;
 
-    public Form1()
+    GravityPoint point1;
+    GravityPoint point2;
+
+    private ParticleEmitter emitter;
+    List<ParticleEmitter> emitters = new();
+
+
+    public CanvasForm()
     {
         InitializeComponent();
         picDisplay.Image = new Bitmap(picDisplay.Width, picDisplay.Height);
-
         emitter = new ParticleEmitter()
         {
             Direction = 2,
@@ -29,13 +46,13 @@ public partial class Form1 : Form
 
         point1 = new GravityPoint
         {
-            X = picDisplay.Width / 2 + 100,
-            Y = picDisplay.Height / 2,
+            X = (float)picDisplay.Width / 2 + 100,
+            Y = (float)picDisplay.Height / 2,
         };
         point2 = new GravityPoint
         {
-            X = picDisplay.Width / 2 - 100,
-            Y = picDisplay.Height / 2,
+            X = (float)picDisplay.Width / 2 - 100,
+            Y = (float)picDisplay.Height / 2,
         };
 
         //emitter.impactPoints.Add(point1);
@@ -58,13 +75,10 @@ public partial class Form1 : Form
         //    X = (float)(picDisplay.Width * 0.75),
         //    Y = picDisplay.Height / 2
         //});
+
+        ResetDebugControls();
     }
 
-    GravityPoint point1;
-    GravityPoint point2;
-
-    private ParticleEmitter emitter;
-    List<ParticleEmitter> emitters = new();
 
     private void timer1_Tick(object sender, EventArgs e)
     {
@@ -82,6 +96,19 @@ public partial class Form1 : Form
         picDisplay.Invalidate(); // обновить picDisplay
     }
 
+    private void ResetDebugControls()
+    {
+        DebugMaxFPS_NumericUpDown.Value = MaxFPS;
+        CurrentFPS_TextBox.Text = CurrentFPS.ToString();
+        DebugSpeed_TrackBar.Value = 100;
+        timer1.Interval = Defaults.ONE_SECOND / Defaults.CurrentFPS;
+        timer1.Enabled = true;
+        ShowSpeedVectors_CheckBox.Checked = Defaults.ShowSpeedVectors;
+        DebugNextStep_Button.Visible = false;
+        DebugPreviousStep_Button.Visible = false;
+        UpdatePreviousStateButtonText();
+    }
+
     private void ClearScreen(Graphics g, Color color)
     {
         g.Clear(color);
@@ -95,32 +122,42 @@ public partial class Form1 : Form
         //    _emitter.X = e.X;
         //    _emitter.Y = e.Y;
         //}
+        if (DebugMode_CheckBox.Checked)
+        {
+            foreach (var particle in emitter.particles)
+            {
+                var dx = Math.Abs(Math.Abs(particle.X) - Math.Abs(e.X));
+                var dy = Math.Abs(Math.Abs(particle.Y) - Math.Abs(e.Y));
+                var distance = Math.Sqrt(dx * dx + dy * dy);
+                if (particle.Radius / 2 <= distance)
+                {
+                    using var g = Graphics.FromImage(picDisplay.Image);
+                    particle.ShowDebugInfo = true;
+                }
+                else
+                {
+                    particle.ShowDebugInfo = false;
+                }
+            }
+        }
+
+        DebugInfo_Label.Text = $"{e.X}\n{e.Y}";
 
         point2.X = e.X;
         point2.Y = e.Y;
     }
 
 
-    private void tbDirection_Scroll(object sender, EventArgs e)
-    {
-        emitter.Direction = tbDirection.Value;
-        lblDirection.Text = $"{tbDirection.Value}°";
-    }
-
-    private void tbGraviton_Scroll(object sender, EventArgs e)
-    {
-        point1.Power = tbGraviton1.Value;
-    }
-
-    private void tbGraviton2_Scroll(object sender, EventArgs e)
-    {
-        point2.Power = tbGraviton2.Value;
-    }
-
     private void DebugMode_CheckBox_CheckedChanged(object sender, EventArgs e)
     {
         Debug_Group.Visible = DebugMode_CheckBox.Checked;
-        // todo reset all debug changes on debug off
+        if (!DebugMode_CheckBox.Checked)
+        {
+            MaxFPS = Defaults.MaxFPS;
+            emitter.IsSpeedVectorVisible = false;
+            CurrentFPS = Defaults.CurrentFPS;
+            ResetDebugControls();
+        }
     }
 
 
@@ -130,28 +167,34 @@ public partial class Form1 : Form
         DebugPreviousStep_Button.Visible = DebugSpeed_TrackBar.Value == 0;
         if (DebugSpeed_TrackBar.Value != 0)
         {
-            float maxFPS = int.Parse(DebugMaxFPS_TextBox.Text);
-            int currentFPS = (int)(DebugSpeed_TrackBar.Value / 100f * maxFPS);
+            CurrentFPS = (int)(DebugSpeed_TrackBar.Value / 100f * MaxFPS);
             try
             {
-                timer1.Interval = 1000 / currentFPS;
-                CurrentFPS_Label.Text = currentFPS.ToString();
+                timer1.Interval = Defaults.ONE_SECOND / CurrentFPS;
+                CurrentFPS_TextBox.Text = CurrentFPS.ToString();
                 timer1.Enabled = true;
             }
             catch (DivideByZeroException) { }
         }
         else
         {
-            CurrentFPS_Label.Text = "0";
+            CurrentFPS_TextBox.Text = "0";
             timer1.Enabled = false;
+            DebugPreviousStep_Button.Text = Regex.Replace(
+                    DebugPreviousStep_Button.Text,
+                    @"\d+",
+                    (emitter.StatesStorage.Count - 1).ToString()
+            );
+            emitter.CurrentStateIndex = emitter.StatesStorage.Count - 1;
         }
     }
 
     private void ShowSpeedVectors_CheckBox_CheckedChanged(object sender, EventArgs e)
     {
+        ShowVectorSpeed = ShowSpeedVectors_CheckBox.Checked;
         foreach (var emitter in emitters)
         {
-            emitter.IsSpeedVectorVisible = ShowSpeedVectors_CheckBox.Checked;
+            emitter.IsSpeedVectorVisible = ShowVectorSpeed;
         }
     }
 
@@ -161,12 +204,18 @@ public partial class Form1 : Form
         picDisplay.Image = new Bitmap(ActiveForm.Size.Width, picDisplay.Height);
     }
 
-    private void DebugNextStep_Button_Click(object sender, EventArgs e)
+    public void DebugNextStep_Button_Click(object sender, EventArgs e)
     {
-        if (emitter.CurrentRestoredState < emitter.StorageSize && emitter.CurrentRestoredState < emitter.StatesStorage.Count)
+        if (emitter.CurrentStateIndex >= emitter.StatesStorage.Count - 1)
+        {
+            timer1_Tick(this, EventArgs.Empty);
+            emitter.CurrentStateIndex = emitter.StatesStorage.Count - 1;
+            UpdatePreviousStateButtonText();
+        }
+        else if (emitter.CurrentStateIndex < emitter.StorageSize - 1)
         {
             emitter.RestoreNextState();
-            UpdatePreviousStateButton();
+            UpdatePreviousStateButtonText();
             using var g = Graphics.FromImage(picDisplay.Image);
             ClearScreen(g, BackgroundColor);
             emitter.Render(g);
@@ -178,20 +227,29 @@ public partial class Form1 : Form
         }
     }
 
-    private void UpdatePreviousStateButton()
+    private void UpdatePreviousStateButtonText()
     {
-        DebugPreviousStep_Button.Text = Regex.Replace(DebugPreviousStep_Button.Text, @"\d+", emitter.CurrentRestoredState.ToString());
-        DebugPreviousStep_Button.Enabled = emitter.CurrentRestoredState != 0;
+        DebugPreviousStep_Button.Text = Regex.Replace(
+        DebugPreviousStep_Button.Text,
+        @"\d+",
+        emitter.CurrentStateIndex.ToString()
+        );
+
+        DebugPreviousStep_Button.Enabled = emitter.CurrentStateIndex != 0;
     }
 
     private void DebugPreviousStep_Button_Click(object sender, EventArgs e)
     {
         emitter.RestorePreviousState();
-        UpdatePreviousStateButton();
-
+        UpdatePreviousStateButtonText();
         using var g = Graphics.FromImage(picDisplay.Image);
         ClearScreen(g, BackgroundColor);
         emitter.Render(g);
         picDisplay.Invalidate(); // обновить picDisplay
+    }
+
+    private void DebugMaxFPS_NumericUpDown_ValueChanged(object sender, EventArgs e)
+    {
+        MaxFPS = (int)DebugMaxFPS_NumericUpDown.Value;
     }
 }

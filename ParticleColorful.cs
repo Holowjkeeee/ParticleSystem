@@ -32,6 +32,7 @@ class ParticleColorful : Particle
         );
 
         DrawSpeedVector(g, (int)(255 * (Life / 100)));
+        if(ShowDebugInfo) DrawDebugInfo(g);
     }
 }
 
