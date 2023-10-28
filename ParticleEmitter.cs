@@ -70,7 +70,7 @@ public class ParticleEmitter
     public List<List<Particle>> StatesStorage = new();
 
     /** Размер памяти состояний, включая текущее состояние */
-    public int StorageSize = 105;
+    public int StorageSize = 11;
 
     public int CurrentStateIndex;
     

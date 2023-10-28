@@ -40,7 +40,7 @@ public class Particle
     /** Видимость вектора скорости */
     public bool IsSpeedVectorVisible = false;
 
-    public bool ShowDebugInfo = true;
+    public bool ShowDebugInfo = false;
 
     private float GetRandomFloat(float min, float max)
     {
@@ -115,8 +115,8 @@ public class Particle
     public void DrawDebugInfo(Graphics g)
     {
         var stringFormat = new StringFormat();
-        stringFormat.Alignment = StringAlignment.Center;
-        stringFormat.LineAlignment = StringAlignment.Center;
+        stringFormat.Alignment = StringAlignment.Near;
+        stringFormat.LineAlignment = StringAlignment.Near;
 
         var text = $"X:{X}\nY:{Y}\nSpeedX:{SpeedX}\nSpeedY:{SpeedY}\nDirection:{Direction}\nLife:{Life}";
         var font = new Font("Verdana", 10);
@@ -126,9 +126,9 @@ public class Particle
 
         // подложнка под текст
         g.FillRectangle(
-            new SolidBrush(Color.Red),
-            X - (float)size.Width / 2,
-            Y - (float)size.Height / 2,
+            new SolidBrush(Color.FromArgb(155, Color.Red)),
+            X,
+            Y,
             size.Width,
             size.Height
         );
@@ -137,7 +137,7 @@ public class Particle
         g.DrawString(
             text,
             font,
-            new SolidBrush(Color.White),
+            new SolidBrush(Color.FromArgb(155, Color.White)),
             X,
             Y,
             stringFormat
